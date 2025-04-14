@@ -9,7 +9,138 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      analytics: {
+        Row: {
+          active_viewers: number | null
+          avg_watch_time: number | null
+          id: string
+          peak_viewers: number | null
+          questions_count: number | null
+          session_id: string
+          timestamp: string
+        }
+        Insert: {
+          active_viewers?: number | null
+          avg_watch_time?: number | null
+          id?: string
+          peak_viewers?: number | null
+          questions_count?: number | null
+          session_id: string
+          timestamp?: string
+        }
+        Update: {
+          active_viewers?: number | null
+          avg_watch_time?: number | null
+          id?: string
+          peak_viewers?: number | null
+          questions_count?: number | null
+          session_id?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          id: string
+          session_id: string
+          text: string
+          timestamp: string
+          username: string | null
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          text: string
+          timestamp?: string
+          username?: string | null
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          text?: string
+          timestamp?: string
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_id: string
+          id: string
+          start_time: string | null
+          title: string
+          video_url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_id: string
+          id?: string
+          start_time?: string | null
+          title: string
+          video_url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_id?: string
+          id?: string
+          start_time?: string | null
+          title?: string
+          video_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
