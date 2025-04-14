@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import SessionsList from '@/components/SessionsList';
 import SupabaseService from '@/services/supabaseService';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
+import RDSService from '@/services/rdsService';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -32,23 +32,22 @@ const EventDetailsPage = () => {
       try {
         setIsLoading(true);
         // Fetch event details
-        const event = await SupabaseService.getEvent(eventId);
+        const event = await RDSService.getEvent(eventId);
         setEventData(event);
         
         // Fetch sessions for this event
-        const sessionData = await SupabaseService.getSessionsForEvent(eventId);
+        const sessionData = await RDSService.getSessionsForEvent(eventId);
         setSessions(sessionData);
         
         // Fetch analytics for each session
         const analyticsData: Record<string, any> = {};
         for (const session of sessionData) {
           try {
-            const sessionAnalytics = await SupabaseService.getAnalyticsForSession(session.id);
+            const sessionAnalytics = await RDSService.getAnalyticsForSession(session.id);
             if (sessionAnalytics) {
               analyticsData[session.id] = sessionAnalytics;
             }
           } catch (error) {
-            // Individual session analytics errors shouldn't fail the whole page
             console.error(`Failed to fetch analytics for session ${session.id}:`, error);
           }
         }

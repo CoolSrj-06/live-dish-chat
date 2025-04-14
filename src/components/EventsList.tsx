@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
-import SupabaseService from '@/services/supabaseService';
+import RDSService from '@/services/rdsService';
 
 interface Event {
   id: string;
@@ -25,7 +24,7 @@ const EventsList = () => {
     const fetchEvents = async () => {
       try {
         setIsLoading(true);
-        const data = await SupabaseService.getEvents();
+        const data = await RDSService.getEvents();
         setEvents(data);
       } catch (error) {
         console.error('Failed to fetch events:', error);
